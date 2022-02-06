@@ -8,16 +8,21 @@ printf "Hello, I'm %s.\n" $USER > /root/config.log
 
 printf "Configuring wpa_supplicant\n" >> /root/config.log
 
+printf "Identify standard interface\n" >> /root/config.log
+printf "WIFI_INTERFACE=" >> /root/config.log
+WIFI_INTERFACE=$(ip route | grep default | grep -oE '\bw\S*')
+echo "${WIFI_INTERFACE}" >> /root/config.log
+
 WIFI_SSID=$(echo "NussPalast")
 echo "${WIFI_SSID}" >> /root/config.log
 
 WIFI_PASSPHRASE=$(echo "LuemmelLuemmel83..")
 echo "${WIFI_PASSPHRASE}" >> /root/config.log
 
-WIFI_PSK=$(wpa_passphrase 'NussPalast' 'LuemmelLuemmel83..' | grep psk= | sed -n '2 p')
+WIFI_PSK=$(wpa_passphrase $WIFI_SSID $WIFI_PASSPHRASE | grep 'psk=' | sed -n '2 p' | sed -e s/psk=//g | tr -d " \t\n\r")
 echo "${WIFI_PSK}" >> /root/config.log
 
-cat > /etc/wpa_supplicant/wpa_supplicant.conf <<EOF
+cat > /root/wpa_supplicant.conf <<EOF
 ctrl_interface=DIR=/var/run/wpa_supplicant GROUP=netdev
 update_config=1
 country=DE
@@ -28,33 +33,24 @@ network={
 	proto=WPA2
 	pairwise=CCMP
 	group=CCMP
-  #eap=TLS
-  key_mgmt=WPA-PSK
-  ssid=$WIFI_SSID
-  $WIFI_PSK
+	#eap=TLS
+	key_mgmt=WPA-PSK
+	ssid=$WIFI_SSID
+	psk=$WIFI_PSK
 }
 EOF
 
-DEFAULT_WIFI_INTERFACE=$(ip route | grep default | grep -oE '\bw\S*')
-echo "${DEFAULT_WIFI_INTERFACE}" >> /root/config.log
+cp /etc/network/interfaces /root/interfaces
+
+echo "# The primary network interface" >> /root/interfaces
+echo "auto ${WIFI_INTERFACE}" >> /root/interfaces
+echo "allow-hotplug ${WIFI_INTERFACE}" >> /root/interfaces
+echo "iface ${WIFI_INTERFACE} inet dhcp" >> /root/interfaces
+echo "	wpa-conf /etc/wpa_supplicant/wpa_supplicant.conf" >> /root/interfaces
 
 mv /etc/network/interfaces /etc/network/interfaces.bk
-cat > /etc/network/interfaces <<EOF
-# This file describes the network interfaces available on your system
-# and how to activate them. For more information, see interfaces(5).
-
-source /etc/network/interfaces.d/*
-
-# The loopback network interface
-auto lo
-iface lo inet loopback
-
-# The. primary network interface
-auto $DEFAULT_WIFI_INTERFACE
-allow-hotplug $DEFAULT_WIFI_INTERFACE
-iface $DEFAULT_WIFI_INTERFACE inet dhcp
-      wpa-conf /etc/wpa_supplicant/wpa_supplicant.conf
-EOF
+cp /root/interfaces /etc/network/interfaces
+cp /root/wpa_supplicant.conf /etc/wpa_supplicant/wpa_supplicant.conf
 
 ###########################################
 ################ Variables ################
