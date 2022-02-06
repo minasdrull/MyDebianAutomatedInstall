@@ -1,5 +1,5 @@
 #!/bin/bash
-printf "Hello, I'm %s.\n" $USER > file.txt
+printf "Hello, I'm %s.\n" $USER > /root/file.txt
 ###########################################
 ################ Variables ################
 ###########################################
