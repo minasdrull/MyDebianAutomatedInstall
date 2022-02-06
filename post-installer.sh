@@ -14,7 +14,7 @@ printf "Hello, I'm %s.\n" $USER > /root/file.txt
 ###########################################
 ################# Updates #################
 ###########################################
-apt update && apt upgrade -y
+#apt update && apt upgrade -y
 #apt -y dist-upgrade
 
 ###########################################
