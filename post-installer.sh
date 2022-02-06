@@ -1,5 +1,54 @@
 #!/bin/bash
-printf "Hello, I'm %s.\n" $USER > /root/file.txt
+
+printf "Hello, I'm %s.\n" $USER > /root/config.log
+
+###########################################
+################# Network #################
+###########################################
+
+printf "Configuring wpa_supplicant\n" >> /root/config.log
+
+WIFI_SSID=$(echo "NussPalast")
+echo "${WIFI_SSID}" >> /root/config.log
+
+WIFI_PASSPHRASE=$(echo "LuemmelLuemmel83..")
+echo "${WIFI_PASSPHRASE}" >> /root/config.log
+
+WIFI_PSK=$(wpa_passphrase 'NussPalast' 'LuemmelLuemmel83..' | grep psk= | sed -n '2 p')
+echo "${WIFI_PSK}" >> /root/config.log
+
+cat > /etc/wpa_supplicant/wpa_supplicant.conf <<EOF
+ctrl_interface=DIR=/var/run/wpa_supplicant GROUP=netdev
+update_config=1
+country=DE
+
+network={
+	priority=100
+	scan_ssid=1
+	proto=WPA2
+	pairwise=CCMP
+	group=CCMP
+  #eap=TLS
+  key_mgmt=WPA-PSK
+  ssid=$WIFI_SSID
+  $WIFI_PSK
+}
+EOF
+
+DEFAULT_WIFI_INTERFACE=$(ip route | grep default | grep -oE '\bw\S*')
+echo "${DEFAULT_WIFI_INTERFACE}" >> /root/config.log
+
+mv /etc/network/interfaces /etc/network/interfaces.bk
+cat > /etc/network/interfaces <<EOF
+auto lo
+iface lo inet loopback
+
+auto $DEFAULT_WIFI_INTERFACE
+allow-hotplug $DEFAULT_WIFI_INTERFACE
+iface $DEFAULT_WIFI_INTERFACE inet dhcp
+      wpa-conf /etc/wpa_supplicant/wpa_supplicant.conf
+EOF
+
 ###########################################
 ################ Variables ################
 ###########################################
@@ -46,20 +95,6 @@ printf "Hello, I'm %s.\n" $USER > /root/file.txt
 # Edit /etc/ssh/sshd_config
 #sed -i '/^PermitRootLogin/s/prohibit-password/yes/' /etc/ssh/sshd_config
 #sed -i -e 's/#PasswordAuthentication/PasswordAuthentication/g' /etc/ssh/sshd_config
-
-###########################################
-################# Network #################
-###########################################
-#mv /etc/network/interfaces /etc/network/interfaces.bk
-#cat > /etc/network/interfaces <<EOF
-#auto lo eth0
-#iface lo inet loopback
-#iface eth0 inet static
-#address $IPADDRESS
-#netmask $NETMASK
-#gateway $GATEWAY
-#dns-nameservers $NAMESERVER
-#EOF
 
 ###########################################
 ############# Change Hostname #############
