@@ -22,34 +22,54 @@ echo "${WIFI_PASSPHRASE}" >> /root/config.log
 WIFI_PSK=$(wpa_passphrase $WIFI_SSID $WIFI_PASSPHRASE | grep 'psk=' | sed -n '2 p' | sed -e s/psk=//g | tr -d " \t\n\r")
 echo "${WIFI_PSK}" >> /root/config.log
 
-cat > /root/wpa_supplicant.conf <<EOF
-ctrl_interface=DIR=/var/run/wpa_supplicant GROUP=netdev
-update_config=1
-country=DE
+echo "" >> /root/wpa_supplicant.conf
+echo "ctrl_interface=DIR=/var/run/wpa_supplicant GROUP=netdev" >> /root/wpa_supplicant.conf
+echo "update_config=1" >> /root/wpa_supplicant.conf
+echo "country=DE" >> /root/wpa_supplicant.conf
+echo "" >> /root/wpa_supplicant.conf
+echo "network={" >> /root/wpa_supplicant.conf
+echo "	priority=100" >> /root/wpa_supplicant.conf
+echo "	scan_ssid=1" >> /root/wpa_supplicant.conf
+echo "	proto=WPA2" >> /root/wpa_supplicant.conf
+echo "	pairwise=CCMP" >> /root/wpa_supplicant.conf
+echo "	group=CCMP" >> /root/wpa_supplicant.conf
+echo "	#eap=TLS" >> /root/wpa_supplicant.conf
+echo "	ssid=\"$WIFI_SSID\"" >> /root/wpa_supplicant.conf
+echo "	psk=\"$WIFI_PSK\"" >> /root/wpa_supplicant.conf
+echo "	key_mgmt=WPA-PSK" >> /root/wpa_supplicant.conf
+echo "}" >> /root/wpa_supplicant.conf
+echo
 
-network={
-	priority=100
-	scan_ssid=1
-	proto=WPA2
-	pairwise=CCMP
-	group=CCMP
-	#eap=TLS
-	key_mgmt=WPA-PSK
-	ssid=$WIFI_SSID
-	psk=$WIFI_PSK
-}
-EOF
+#cat > /root/wpa_supplicant.conf <<EOF
+#ctrl_interface=DIR=/var/run/wpa_supplicant GROUP=netdev
+#update_config=1
+#country=DE
+#
+#network={
+#	priority=100
+#	scan_ssid=1
+#	proto=WPA2
+#	pairwise=CCMP
+#	group=CCMP
+#	#eap=TLS
+#	key_mgmt=WPA-PSK
+#	ssid=$WIFI_SSID
+#	psk=$WIFI_PSK
+#}
+#EOF
 
 cp /etc/network/interfaces /root/interfaces
 
-echo "# The primary network interface" >> /root/interfaces
-echo "auto ${WIFI_INTERFACE}" >> /root/interfaces
-echo "allow-hotplug ${WIFI_INTERFACE}" >> /root/interfaces
-echo "iface ${WIFI_INTERFACE} inet dhcp" >> /root/interfaces
+echo "# The primary wifi network interface" >> /root/interfaces
+echo "auto \"WIFI_INTERFACE\"" >> /root/interfaces
+echo "allow-hotplug \"WIFI_INTERFACE\"" >> /root/interfaces
+echo "iface \"WIFI_INTERFACE\" inet dhcp" >> /root/interfaces
 echo "	wpa-conf /etc/wpa_supplicant/wpa_supplicant.conf" >> /root/interfaces
+echo
 
 mv /etc/network/interfaces /etc/network/interfaces.bk
 cp /root/interfaces /etc/network/interfaces
+mv /etc/wpa_supplicant/wpa_supplicant.conf /etc/wpa_supplicant/wpa_supplicant.bk
 cp /root/wpa_supplicant.conf /etc/wpa_supplicant/wpa_supplicant.conf
 
 ###########################################
