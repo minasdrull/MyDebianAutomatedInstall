@@ -40,9 +40,16 @@ echo "${DEFAULT_WIFI_INTERFACE}" >> /root/config.log
 
 mv /etc/network/interfaces /etc/network/interfaces.bk
 cat > /etc/network/interfaces <<EOF
+# This file describes the network interfaces available on your system
+# and how to activate them. For more information, see interfaces(5).
+
+source /etc/network/interfaces.d/*
+
+# The loopback network interface
 auto lo
 iface lo inet loopback
 
+# The. primary network interface
 auto $DEFAULT_WIFI_INTERFACE
 allow-hotplug $DEFAULT_WIFI_INTERFACE
 iface $DEFAULT_WIFI_INTERFACE inet dhcp
