@@ -22,7 +22,7 @@ echo "${WIFI_PASSPHRASE}" >> /root/config.log
 WIFI_PSK=$(wpa_passphrase $WIFI_SSID $WIFI_PASSPHRASE | grep 'psk=' | sed -n '2 p' | sed -e s/psk=//g | tr -d " \t\n\r")
 echo "${WIFI_PSK}" >> /root/config.log
 
-echo "" >> /root/wpa_supplicant.conf
+touch /root/wpa_supplicant.conf
 echo "ctrl_interface=DIR=/var/run/wpa_supplicant GROUP=netdev" >> /root/wpa_supplicant.conf
 echo "update_config=1" >> /root/wpa_supplicant.conf
 echo "country=DE" >> /root/wpa_supplicant.conf
@@ -34,9 +34,9 @@ echo "	proto=WPA2" >> /root/wpa_supplicant.conf
 echo "	pairwise=CCMP" >> /root/wpa_supplicant.conf
 echo "	group=CCMP" >> /root/wpa_supplicant.conf
 echo "	#eap=TLS" >> /root/wpa_supplicant.conf
-echo "	ssid=\"$WIFI_SSID\"" >> /root/wpa_supplicant.conf
-echo "	psk=\"$WIFI_PSK\"" >> /root/wpa_supplicant.conf
 echo "	key_mgmt=WPA-PSK" >> /root/wpa_supplicant.conf
+echo "	ssid=\"$WIFI_SSID\"" >> /root/wpa_supplicant.conf
+echo "	psk=$WIFI_PSK" >> /root/wpa_supplicant.conf
 echo "}" >> /root/wpa_supplicant.conf
 echo
 
