@@ -13,17 +13,29 @@ printf "WIFI_INTERFACE=" >> /root/config.log
 WIFI_INTERFACE=$(ip route | grep default | grep -oE '\bw\S*')
 echo "${WIFI_INTERFACE}" >> /root/config.log
 
-printf "WIFI_SSID=" >> /root/config.log
-WIFI_SSID=$(echo "NussPalast")
-echo "${WIFI_SSID}" >> /root/config.log
+printf "WIFI_SSID5GHZ=" >> /root/config.log
+WIFI_SSID5GHZ=$(echo "NussPalast")
+echo "${WIFI_SSID5GHZ}" >> /root/config.log
 
-printf "WIFI_PASSPHRASE=" >> /root/config.log
-WIFI_PASSPHRASE=$(echo "LuemmelLuemmel83..")
-echo "${WIFI_PASSPHRASE}" >> /root/config.log
+printf "WIFI_PASSPHRASE5GHZ=" >> /root/config.log
+WIFI_PASSPHRASE5GHZ=$(echo "LuemmelLuemmel83..")
+echo "${WIFI_PASSPHRASE5GHZ}" >> /root/config.log
 
-printf "WIFI_PSK=" >> /root/config.log
-WIFI_PSK=$(wpa_passphrase $WIFI_SSID $WIFI_PASSPHRASE | grep 'psk=' | sed -n '2 p' | sed -e s/psk=//g | tr -d " \t\n\r")
-echo "${WIFI_PSK}" >> /root/config.log
+printf "WIFI_PSK5GHZ=" >> /root/config.log
+WIFI_PSK5GHZ=$(wpa_passphrase $WIFI_SSID5GHZ $WIFI_PASSPHRASE5GHZ | grep 'psk=' | sed -n '2 p' | sed -e s/psk=//g | tr -d " \t\n\r")
+echo "${WIFI_PSK5GHZ}" >> /root/config.log
+
+printf "WIFI_SSID2GHZ=" >> /root/config.log
+WIFI_SSID2GHZ=$(echo "NussPalast_2")
+echo "${WIFI_SSID2GHZ}" >> /root/config.log
+
+printf "WIFI_PASSPHRASE2GHZ=" >> /root/config.log
+WIFI_PASSPHRASE2GHZ=$(echo "LuemmelLuemmel83..")
+echo "${WIFI_PASSPHRASE2GHZ}" >> /root/config.log
+
+printf "WIFI_PSK2GHZ=" >> /root/config.log
+WIFI_PSK2GHZ=$(wpa_passphrase $WIFI_SSID2GHZ $WIFI_PASSPHRASE2GHZ | grep 'psk=' | sed -n '2 p' | sed -e s/psk=//g | tr -d " \t\n\r")
+echo "${WIFI_PSK2GHZ}" >> /root/config.log
 
 touch /root/wpa_supplicant.conf
 echo "ctrl_interface=DIR=/var/run/wpa_supplicant GROUP=netdev" >> /root/wpa_supplicant.conf
@@ -38,25 +50,38 @@ echo "	pairwise=CCMP" >> /root/wpa_supplicant.conf
 echo "	group=CCMP" >> /root/wpa_supplicant.conf
 echo "	#eap=TLS" >> /root/wpa_supplicant.conf
 echo "	key_mgmt=WPA-PSK" >> /root/wpa_supplicant.conf
-#echo "	ssid=\"$WIFI_SSID\"" >> /root/wpa_supplicant.conf
-echo "	ssid=\"${WIFI_SSID}\"" >> /root/wpa_supplicant.conf
-#echo "	psk=$WIFI_PSK" >> /root/wpa_supplicant.conf
-echo "	psk=${WIFI_PSK}" >> /root/wpa_supplicant.conf
+#echo "	ssid=\"$WIFI_SSID5GHZ\"" >> /root/wpa_supplicant.conf
+echo "	ssid=\"${WIFI_SSID5GHZ}\"" >> /root/wpa_supplicant.conf
+#echo "	psk=$WIFI_PSK5GHZ" >> /root/wpa_supplicant.conf
+echo "	psk=${WIFI_PSK5GHZ}" >> /root/wpa_supplicant.conf
+echo "}" >> /root/wpa_supplicant.conf
+echo "network={" >> /root/wpa_supplicant.conf
+echo "	priority=90" >> /root/wpa_supplicant.conf
+echo "	scan_ssid=1" >> /root/wpa_supplicant.conf
+echo "	proto=WPA2" >> /root/wpa_supplicant.conf
+echo "	pairwise=CCMP" >> /root/wpa_supplicant.conf
+echo "	group=CCMP" >> /root/wpa_supplicant.conf
+echo "	#eap=TLS" >> /root/wpa_supplicant.conf
+echo "	key_mgmt=WPA-PSK2GHZ" >> /root/wpa_supplicant.conf
+#echo "	ssid=\"$WIFI_SSID2GHZ\"" >> /root/wpa_supplicant.conf
+echo "	ssid=\"${WIFI_SSID2GHZ}\"" >> /root/wpa_supplicant.conf
+#echo "	psk=$WIFI_PSK2GHZ" >> /root/wpa_supplicant.conf
+echo "	psk=${WIFI_PSK2GHZ}" >> /root/wpa_supplicant.conf
 echo "}" >> /root/wpa_supplicant.conf
 
 mv /etc/wpa_supplicant/wpa_supplicant.conf /etc/wpa_supplicant/wpa_supplicant.bk
 cp /root/wpa_supplicant.conf /etc/wpa_supplicant/wpa_supplicant.conf
 
-#cp /etc/network/interfaces /root/interfaces
+cp /etc/network/interfaces /root/interfaces
+sed '/'"$WIFI_INTERFACE"'/ ,/^$/d’ -i /root/interfaces
+echo "# The primary wifi network interface" >> /root/interfaces
+echo "auto $WIFI_INTERFACE" >> /root/interfaces
+echo "allow-hotplug $WIFI_INTERFACE" >> /root/interfaces
+echo "iface $WIFI_INTERFACE inet dhcp" >> /root/interfaces
+echo "	wpa-conf /etc/wpa_supplicant/wpa_supplicant.conf" >> /root/interfaces
 
-#echo "# The primary wifi network interface" >> /root/interfaces
-#echo "auto $WIFI_INTERFACE" >> /root/interfaces
-#echo "allow-hotplug $WIFI_INTERFACE" >> /root/interfaces
-#echo "iface $WIFI_INTERFACE inet dhcp" >> /root/interfaces
-#echo "	wpa-conf /etc/wpa_supplicant/wpa_supplicant.conf" >> /root/interfaces
-
-#mv /etc/network/interfaces /etc/network/interfaces.bk
-#cp /root/interfaces /etc/network/interfaces
+mv /etc/network/interfaces /etc/network/interfaces.bk
+cp /root/interfaces /etc/network/interfaces
 
 ###########################################
 ################ Variables ################
