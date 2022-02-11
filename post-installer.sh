@@ -62,7 +62,7 @@ echo "	proto=WPA2" >> /root/wpa_supplicant.conf
 echo "	pairwise=CCMP" >> /root/wpa_supplicant.conf
 echo "	group=CCMP" >> /root/wpa_supplicant.conf
 echo "	#eap=TLS" >> /root/wpa_supplicant.conf
-echo "	key_mgmt=WPA-PSK2GHZ" >> /root/wpa_supplicant.conf
+echo "	key_mgmt=WPA-PSK" >> /root/wpa_supplicant.conf
 #echo "	ssid=\"$WIFI_SSID2GHZ\"" >> /root/wpa_supplicant.conf
 echo "	ssid=\"${WIFI_SSID2GHZ}\"" >> /root/wpa_supplicant.conf
 #echo "	psk=$WIFI_PSK2GHZ" >> /root/wpa_supplicant.conf
@@ -78,10 +78,10 @@ echo "allow-hotplug $WIFI_INTERFACE" >> /root/interfaces
 echo "iface $WIFI_INTERFACE inet dhcp" >> /root/interfaces
 echo "	wpa-conf /etc/wpa_supplicant/wpa_supplicant.conf" >> /root/interfaces
 
-mv /etc/network/interfaces /etc/network/interfaces.bk
-mv /etc/wpa_supplicant/wpa_supplicant.conf /etc/wpa_supplicant/wpa_supplicant.bk
-cp /root/wpa_supplicant.conf /etc/wpa_supplicant/wpa_supplicant.conf
-cp /root/interfaces /etc/network/interfaces
+#mv /etc/network/interfaces /etc/network/interfaces.bk
+#cp /root/wpa_supplicant.conf /etc/wpa_supplicant/wpa_supplicant.conf
+#mv /etc/wpa_supplicant/wpa_supplicant.conf /etc/wpa_supplicant/wpa_supplicant.bk
+#cp /root/interfaces /etc/network/interfaces
 
 ###########################################
 ################ Variables ################
