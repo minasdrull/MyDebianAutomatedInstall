@@ -13,12 +13,15 @@ printf "WIFI_INTERFACE=" >> /root/config.log
 WIFI_INTERFACE=$(ip route | grep default | grep -oE '\bw\S*')
 echo "${WIFI_INTERFACE}" >> /root/config.log
 
+printf "WIFI_SSID=" >> /root/config.log
 WIFI_SSID=$(echo "NussPalast")
 echo "${WIFI_SSID}" >> /root/config.log
 
+printf "WIFI_PASSPHRASE=" >> /root/config.log
 WIFI_PASSPHRASE=$(echo "LuemmelLuemmel83..")
 echo "${WIFI_PASSPHRASE}" >> /root/config.log
 
+printf "WIFI_PSK=" >> /root/config.log
 WIFI_PSK=$(wpa_passphrase $WIFI_SSID $WIFI_PASSPHRASE | grep 'psk=' | sed -n '2 p' | sed -e s/psk=//g | tr -d " \t\n\r")
 echo "${WIFI_PSK}" >> /root/config.log
 
@@ -41,6 +44,9 @@ echo "	ssid=\"${WIFI_SSID}\"" >> /root/wpa_supplicant.conf
 echo "	psk=${WIFI_PSK}" >> /root/wpa_supplicant.conf
 echo "}" >> /root/wpa_supplicant.conf
 
+mv /etc/wpa_supplicant/wpa_supplicant.conf /etc/wpa_supplicant/wpa_supplicant.bk
+cp /root/wpa_supplicant.conf /etc/wpa_supplicant/wpa_supplicant.conf
+
 cp /etc/network/interfaces /root/interfaces
 
 echo "# The primary wifi network interface" >> /root/interfaces
@@ -48,12 +54,9 @@ echo "auto $WIFI_INTERFACE" >> /root/interfaces
 echo "allow-hotplug $WIFI_INTERFACE" >> /root/interfaces
 echo "iface $WIFI_INTERFACE inet dhcp" >> /root/interfaces
 echo "	wpa-conf /etc/wpa_supplicant/wpa_supplicant.conf" >> /root/interfaces
-echo
 
 mv /etc/network/interfaces /etc/network/interfaces.bk
 cp /root/interfaces /etc/network/interfaces
-mv /etc/wpa_supplicant/wpa_supplicant.conf /etc/wpa_supplicant/wpa_supplicant.bk
-cp /root/wpa_supplicant.conf /etc/wpa_supplicant/wpa_supplicant.conf
 
 ###########################################
 ################ Variables ################
