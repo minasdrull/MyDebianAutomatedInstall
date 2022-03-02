@@ -2,6 +2,7 @@
 Description=FirstBoot
 After=time-sync.target
 Before=rc-local.service
+ConditionFirstBoot=true
 ConditionFileNotEmpty=/root/firstboot.sh
 
 [Service]
@@ -12,4 +13,3 @@ RemainAfterExit=no
 
 [Install]
 WantedBy=multi-user.target
-systemctl enable systemd-time-wait-sync.service
