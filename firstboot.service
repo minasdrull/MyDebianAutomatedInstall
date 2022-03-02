@@ -2,7 +2,6 @@
 Description=FirstBoot
 After=time-sync.target
 Before=rc-local.service
-ConditionFirstBoot=true
 ConditionFileNotEmpty=/root/firstboot.sh
 
 [Service]
