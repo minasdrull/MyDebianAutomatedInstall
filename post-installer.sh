@@ -80,9 +80,8 @@ echo "allow-hotplug $WIFI_INTERFACE" >> /root/interfaces
 echo "iface $WIFI_INTERFACE inet dhcp" >> /root/interfaces
 echo "	wpa-conf /etc/wpa_supplicant/wpa_supplicant.conf" >> /root/interfaces
 
-mv /etc/network/interfaces /etc/network/interfaces.bk
-cp /root/wpa_supplicant.conf /target/etc/wpa_supplicant/wpa_supplicant.conf
-mv /etc/wpa_supplicant/wpa_supplicant.conf /etc/wpa_supplicant/wpa_supplicant.bk
+#mv /etc/network/interfaces /etc/network/interfaces.bk
+#cp /root/wpa_supplicant.conf /target/etc/wpa_supplicant/wpa_supplicant.conf
 #cp /root/interfaces /target/etc/network/interfaces
 
 ###########################################
