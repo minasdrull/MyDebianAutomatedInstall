@@ -1,0 +1,15 @@
+[Unit]
+Description=FirstBoot
+After=time-sync.target
+Before=rc-local.service
+ConditionFileNotEmpty=/root/firstboot.sh
+
+[Service]
+ExecStart=/bin/bash /root/firstboot.sh
+ExecStartPost=/bin/mv /root/firstboot.sh /root/firstboot.sh.done
+Type=oneshot
+RemainAfterExit=no
+
+[Install]
+WantedBy=multi-user.target
+systemctl enable systemd-time-wait-sync.service
