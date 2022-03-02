@@ -16,11 +16,11 @@ WIFI_INTERFACE=$(ip route | grep default | grep -oE '\bw\S*')
 echo "${WIFI_INTERFACE}" >> /root/config.log
 
 printf "WIFI_SSID5GHZ=" >> /root/config.log
-WIFI_SSID5GHZ=$(echo "SSID_NAME5GHZ")
+WIFI_SSID5GHZ=$(echo "NussPalastCloud5G")
 echo "${WIFI_SSID5GHZ}" >> /root/config.log
 
 printf "WIFI_PASSPHRASE5GHZ=" >> /root/config.log
-WIFI_PASSPHRASE5GHZ=$(echo "1234567890")
+WIFI_PASSPHRASE5GHZ=$(echo "LuemmelLuemmel83..")
 echo "${WIFI_PASSPHRASE5GHZ}" >> /root/config.log
 
 printf "WIFI_PSK5GHZ=" >> /root/config.log
@@ -28,11 +28,11 @@ WIFI_PSK5GHZ=$(wpa_passphrase $WIFI_SSID5GHZ $WIFI_PASSPHRASE5GHZ | grep 'psk=' 
 echo "${WIFI_PSK5GHZ}" >> /root/config.log
 
 printf "WIFI_SSID2GHZ=" >> /root/config.log
-WIFI_SSID2GHZ=$(echo "SSID_NAME2GHZ")
+WIFI_SSID2GHZ=$(echo "NussPalastCloud2G")
 echo "${WIFI_SSID2GHZ}" >> /root/config.log
 
 printf "WIFI_PASSPHRASE2GHZ=" >> /root/config.log
-WIFI_PASSPHRASE2GHZ=$(echo "1234567890")
+WIFI_PASSPHRASE2GHZ=$(echo "LuemmelLuemmel83..")
 echo "${WIFI_PASSPHRASE2GHZ}" >> /root/config.log
 
 printf "WIFI_PSK2GHZ=" >> /root/config.log
