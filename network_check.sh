@@ -12,11 +12,11 @@
 # If any of the ips responds, the network is considered functional.
 # A minimum of one ip is required, in the example below it shows how to check two different
 # gateways using a space character as delimiter.
-gateway_ips=''
+gateway_ips='192.168.178.1'
 # Set nic to your Network card name, as seen in ip output.
 # If you have multiple interfaces and are currently online, you can find which is in use with:
 # ip route get 1.1.1.1 | head -n1 | cut -d' ' -f5
-nic='wlan0'
+nic='wlp3s0'
 # Set network_check_threshold to the maximum number of failed checks that must fail
 # before declaring the network as non functional.
 network_check_threshold=5
