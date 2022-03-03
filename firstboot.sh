@@ -3,9 +3,9 @@
 #systemd-machine-id-setup
 cp /root/wpa_supplicant.conf /etc/wpa_supplicant/wpa_supplicant.conf
 cp /root/interfaces /etc/network/interfaces
-sed -i -e 's/XKBLAYOUT="us"/XKBLAYOUT="de"/' /etc/default/keyboard
-udevadm trigger --subsystem-match=input --action=change
-setupcon
+#sed -i -e 's/XKBLAYOUT="us"/XKBLAYOUT="de"/' /etc/default/keyboard
+#udevadm trigger --subsystem-match=input --action=change
+#setupcon
 #export DEBIAN_FRONTEND=noninteractive
 #apt install -q -y keyboard-configuration console-setup
 #apt install keyboard-configuration console-setup
