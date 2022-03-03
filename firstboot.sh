@@ -4,6 +4,7 @@
 cp /root/wpa_supplicant.conf /etc/wpa_supplicant/wpa_supplicant.conf
 cp /root/interfaces /etc/network/interfaces
 #sed -i -e 's/XKBLAYOUT="us"/XKBLAYOUT="de"/' /etc/default/keyboard
+#sed -n '/my %xkbsym_table/p' /usr/bin/ckbcomp
 #udevadm trigger --subsystem-match=input --action=change
 #setupcon
 #export DEBIAN_FRONTEND=noninteractive
