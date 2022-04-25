@@ -273,9 +273,9 @@ adduser	adduser/homedir-permission	boolean	true
 #### user-setup-udeb_1.88_all.udeb
 ############################
 # for internal use only
-user-setup-udeb	passwd/user-uid	string	
+#user-setup-udeb	passwd/user-uid	string	
 # for internal use only
-user-setup-udeb	passwd/user-default-groups	string	audio cdrom dip floppy video plugdev netdev scanner bluetooth debian-tor lpadmin
+#user-setup-udeb	passwd/user-default-groups	string	audio cdrom dip floppy video plugdev netdev scanner bluetooth debian-tor lpadmin
 
 ### Description: Allow login as root?
 #   If you choose not to allow root to log in, then a user account will be
@@ -370,13 +370,13 @@ d-i passwd/user-password-again password 4rfvgbhu8765
 d-i passwd/shadow boolean true
 
 # Empty password
-user-setup-udeb	user-setup/password-empty	error	
+#user-setup-udeb	user-setup/password-empty	error	
 # Reserved username
-user-setup-udeb	passwd/username-reserved	error	
+#user-setup-udeb	passwd/username-reserved	error	
 # Invalid username
-user-setup-udeb	passwd/username-bad	error	
+#user-setup-udeb	passwd/username-bad	error	
 # Password input error
-user-setup-udeb	user-setup/password-mismatch	error	
+#user-setup-udeb	user-setup/password-mismatch	error	
 
 ############################
 #### openssh-server_8.4p1-5_amd64.deb
