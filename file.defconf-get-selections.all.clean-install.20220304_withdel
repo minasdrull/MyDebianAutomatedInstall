@@ -272,10 +272,22 @@ adduser	adduser/homedir-permission	boolean	true
 ############################
 #### user-setup-udeb_1.88_all.udeb
 ############################
-# for internal use only
-#user-setup-udeb	passwd/user-uid	string	
-# for internal use only
-#user-setup-udeb	passwd/user-default-groups	string	audio cdrom dip floppy video plugdev netdev scanner bluetooth debian-tor lpadmin
+
+### Description: for internal use only
+# d-i passwd/root-password-crypted password <password>
+
+### Description: for internal use only
+# d-i passwd/user-password-crypted password <password>
+
+### Description: for internal use only
+# d-i passwd/user-uid string <string>
+# Manual installation entry
+# user-setup-udeb	passwd/user-uid	string	
+
+### Description: for internal use only
+# d-i passwd/user-default-groups string audio cdrom dip floppy video plugdev netdev scanner bluetooth debian-tor lpadmin
+# Manual installation entry
+# user-setup-udeb	passwd/user-default-groups	string	audio cdrom dip floppy video plugdev netdev scanner bluetooth debian-tor lpadmin
 
 ### Description: Allow login as root?
 #   If you choose not to allow root to log in, then a user account will be
@@ -283,7 +295,7 @@ adduser	adduser/homedir-permission	boolean	true
 # d-i passwd/root-login boolean true
 # Manual install entry
 # Allow login as root?
-#user-setup-udeb	passwd/root-login	boolean	true
+# user-setup-udeb	passwd/root-login	boolean	true
 d-i passwd/root-login boolean true
 
 ### Description: Root password:
@@ -369,6 +381,7 @@ d-i passwd/user-password-again password 4rfvgbhu8765
 # user-setup-udeb	passwd/shadow	boolean	true
 d-i passwd/shadow boolean true
 
+#Errors
 # Empty password
 #user-setup-udeb	user-setup/password-empty	error	
 # Reserved username
@@ -385,6 +398,104 @@ d-i passwd/shadow boolean true
 openssh-server	openssh-server/permit-root-login	boolean	true
 # Allow password authentication?
 openssh-server	openssh-server/password-authentication	boolean	true
+
+############################
+#### partman-auto_157_amd64.udeb
+############################
+
+### Description: Partitioning method:
+#   The installer can guide you through partitioning a disk (using different
+#   standard schemes) or, if you prefer, you can do it manually. With guided
+#   partitioning you will still have a chance later to review and customise
+#   the results.
+#   .
+#   If you choose guided partitioning for an entire disk, you will next be
+#   asked which disk should be used.
+# d-i partman-auto/init_automatically_partition select <choice>
+# Possible choices: ${DESCRIPTIONS}
+# If the system has free space you can choose to only partition that space.
+# This is only honoured if partman-auto/method (below) is not set.
+#d-i partman-auto/init_automatically_partition select biggest_free
+
+### Description: for internal use; can be preseeded
+#   Device to partition, in either devfs or non format
+# d-i partman-auto/disk string <string>
+# Alternatively, you may specify a disk to partition. If the system has only
+# one disk the installer will default to using that, but otherwise the device
+# name must be given in traditional, non-devfs format (so e.g. /dev/sda
+# and not e.g. /dev/discs/disc0/disc).
+# For example, to use the first SCSI/SATA hard disk:
+d-i partman-auto/disk string /dev/sda
+
+### Description: for internal use; can be preseeded
+#   Method to use for partitioning
+# In addition, you'll need to specify the method to use.
+# The presently available methods are:
+# - regular: use the usual partition types for your architecture
+# - lvm:     use LVM to partition the disk
+# - crypto:  use LVM within an encrypted partition
+# d-i partman-auto/method string <string>
+d-i partman-auto/method string regular
+
+### Description: for internal use; can be preseeded
+#   Cap RAM size to specified size in MB, when calculating the swap
+#   partition size. Defaults to 1024, meaning 1GB, and since swap is
+#   maximum 200% of RAM in the default recipes, it results in swap
+#   partitions to be capped at 2GB. To revert to previous behaviour of
+#   uncapped swap size with respect to available ram, preseed this key to
+#   any string, e.g. partman-auto/cap-ram=false
+# d-i partman-auto/cap-ram string 1024
+
+### Description: Partitioning method:
+#   If you choose guided partitioning for an entire disk, you will next be
+#   asked which disk should be used.
+# d-i partman-auto/automatically_partition select <choice>
+# Possible choices: ${DESCRIPTIONS}
+
+### Description: Partitioning scheme:
+#   Selected for partitioning:
+#   .
+#   ${TARGET}
+#   .
+#   The disk can be partitioned using one of several different schemes.
+#   If you are unsure, choose the first one.
+# d-i partman-auto/choose_recipe select <choice>
+# Possible choices: ${DESCRIPTIONS}
+# You can choose one of the three predefined partitioning recipes:
+# - atomic: all files in one partition
+# - home:   separate /home partition
+# - multi:  separate /home, /var, and /tmp partitions
+d-i partman-auto/choose_recipe select unencrypted-install
+
+### Description: for internal use; can be preseeded
+#   File to load for expert recipe
+# d-i partman-auto/expert_recipe_file string <string>
+
+### Description: for internal use; can be preseeded
+#   Expert recipe content
+# d-i partman-auto/expert_recipe string <string>
+d-i partman-auto/expert_recipe string \
+        unencrypted-install :: \
+                538 538 1075 free \
+                        $iflabel{ gpt } $reusemethod{ } \
+                        method{ efi } format{ } \
+                        mountpoint{ /boot } \
+                . \
+                100000 100000 -1 ext4 \
+                        $primary{ } \
+                        method{ format } format{ } \
+                        use_filesystem{ } filesystem{ ext4 } \
+                        mountpoint{ / } \
+                .
+
+
+
+### Description: Select disk to partition:
+#   Note that all data on the disk you select will be erased, but not before
+#   you have confirmed that you really want to make the changes.
+# d-i partman-auto/select_disk select <choice>
+# Possible choices: ${DESCRIPTIONS}
+
 
 ############################
 #### preseed-common_1.109_all.udeb
