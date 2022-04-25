@@ -413,7 +413,7 @@ netcfg	netcfg/wireless_security_type	select	wpa
 # WEP key for wireless device :
 netcfg	netcfg/wireless_wep	string	
 # WPA/WPA2 passphrase for wireless device wlo2:
-netcfg	netcfg/wireless_wpa	string	LuemmelLuemmel83..
+netcfg	netcfg/wireless_wpa	string	luemmelluemmel
 # Hostname:
 netcfg	netcfg/get_hostname	string	debian-unassigned
 # for internal use; can be preseeded
@@ -432,7 +432,7 @@ netcfg	netcfg/target_network_config	select	loopback
 netcfg	netcfg/link_wait_timeout	string	3
 # Wireless network:
 # Choices: ULAN2.4, NussPalast, NussPalastCloud2G, UPCAB74899, Vodafone-175C, Vodafone-D445, FRITZ!Box 7530 XJ, Vodafone-BC14, Gryffindor Gemeinschaftsraum 5G, Vodafone-D0EC, Vodafone-828750, Fuer liebe Gaeste, NussPalastCloud5G, WLAN-271395, , Enter ESSID manually
-netcfg	netcfg/wireless_show_essids	select	NussPalastCloud2G
+netcfg	netcfg/wireless_show_essids	select	kunfupanda2G
 # DHCP hostname:
 netcfg	netcfg/dhcp_hostname	string	
 # Network configuration method:
