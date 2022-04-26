@@ -8,21 +8,60 @@ d-i partman/early_command \
 ############################
 #### cdebconf-udeb_0.260_amd64.udeb
 ############################
+
+### Description: for internal use only
+#   Default language
+# d-i debconf/language string en
+
+### Description: Ignore questions with a priority less than:
+#   Packages that use debconf for configuration prioritize the questions they
+#   might ask you. Only questions with a certain priority or higher are
+#   actually shown to you; all less important questions are skipped.
+#   .
+#   You can select the lowest priority of question you want to see:
+#    - 'critical' is for items that will probably break the system
+#       without user intervention.
+#    - 'high' is for items that don't have reasonable defaults.
+#    - 'medium' is for normal items that have reasonable defaults.
+#    - 'low' is for trivial items that have defaults that will work in
+#      the vast majority of cases.
+#   .
+#   For example, this question is of medium priority, and if your priority
+#   were already 'high' or 'critical', you wouldn't see this question.
+# d-i debconf/priority select high
+# Possible choices: critical, high, medium, low
+
+### Description: for internal use only
+#   Frontend to use. Change this setting in your script to 
+#   switch the cdebconf frontend upon the next GO command.
+# d-i debconf/frontend string <string>
+
+### Description: for internal use only
+#   Display again already asked questions
+# d-i debconf/showold boolean false
+
+### Description: for internal use only
+#   Set to true by cdebconf when translations have been permanently dropped
+#   from the database due to DEBCONF_DROP_TRANSLATIONS=1 and cannot be
+#   reloaded.
+# d-i debconf/translations-dropped boolean false
+
+
 # for internal use only
-d-i	debconf/language	string	en_US:en
+#d-i	debconf/language	string	en_US:en
 # for internal use only
-d-i	debconf/showold	boolean	false
+#d-i	debconf/showold	boolean	false
 # for internal use only
-d-i	debconf/translations-dropped	boolean	false
+#d-i	debconf/translations-dropped	boolean	false
 # Ignore questions with a priority less than:
 # Choices: critical, high, medium, low
-debconf	debconf/priority	select	high
+#debconf	debconf/priority	select	high
 # Ignore questions with a priority less than:
 # Choices: critical, high, medium, low
 #d-i	debconf/priority	select	low
 # Interface to use:
 # Choices: Dialog, Readline, Gnome, Kde, Editor, Noninteractive
-debconf	debconf/frontend	select	Dialog
+#debconf	debconf/frontend	select	Dialog
 
 ############################
 #### localechooser_2.93_amd64.udeb
@@ -1004,54 +1043,140 @@ iproute2	iproute2/setcaps	boolean	false
 ############################
 #### choose-mirror-bin_2.111_amd64.udeb
 ############################
-# country code or "manual" (for internal use)
-choose-mirror-bin	mirror/country	string	DE
-# Debian version to install:
+
+### Description: country code or "manual" (for internal use)
+# d-i mirror/country string <string>
+# Manual install entry/value
+# choose-mirror-bin	mirror/country	string	DE
+d-i mirror/country string DE
+
+### Description: Debian version to install:
+#   Debian comes in several flavors. Stable is well-tested and rarely changes.
+#   Unstable is untested and frequently changing. Testing is a middle ground,
+#   that receives many of the new versions from unstable if they are not too
+#   buggy.
+#   .
+#   Only flavors available on the selected mirror are listed.
+# d-i mirror/suite select <choice>
+# Possible choices: ${CHOICES}
+# Manual install entry/value
 # Choices: bullseye${!TAB}-${!TAB}stable
-choose-mirror-bin	mirror/suite	select	stable
-# for internal use only
-choose-mirror-bin	mirror/codename	string	bullseye
-# Go back and try a different mirror?
-choose-mirror-bin	mirror/no-default	boolean	true
-# Debian archive mirror country:
+# choose-mirror-bin	mirror/suite	select	stable
+d-i mirror/suite select stable
+
+### Description: for internal use only
+# d-i mirror/codename string <string>
+# Manual install entry/value
+# choose-mirror-bin	mirror/codename	string	bullseye
+d-i mirror/codename string bullseye
+
+### Description: Go back and try a different mirror?
+#   The specified (default) Debian version (${RELEASE}) is not available from
+#   the selected mirror. It is possible to continue and select a different
+#   release for your installation, but normally you should go back and select
+#   a different mirror that does support the correct version.
+# d-i mirror/no-default boolean true
+# Manual install entry/value
+# choose-mirror-bin	mirror/no-default	boolean	true
+d-i mirror/no-default boolean true
+
+### Description: Debian archive mirror country:
+#   The goal is to find a mirror of the Debian archive that is close to you on the network -- be
+#   aware that nearby countries, or even your own, may not be the best choice.
+# d-i mirror/http/countries select US
+# Possible choices: enter information manually, Argentina, Armenia, Australia, Austria, Belarus, Belgium, Brazil, Bulgaria, Cambodia, Canada, Chile, China, Costa Rica, Croatia, Czechia, Denmark, El Salvador, Estonia, Finland, France, Georgia, Germany, Greece, Hong Kong, Hungary, India, Indonesia, Iran\, Islamic Republic of, Israel, Italy, Japan, Kazakhstan, Kenya, Korea\, Republic of, Kyrgyzstan, Latvia, Lithuania, Luxembourg, Moldova, Monaco, Netherlands, New Caledonia, New Zealand, North Macedonia, Norway, Philippines, Poland, Portugal, Romania, Russian Federation, RÃ©union, Serbia, Singapore, Slovakia, Slovenia, South Africa, Spain, Sweden, Switzerland, Taiwan, Thailand, Turkey, Ukraine, United Kingdom, United States, Uruguay, Vietnam
+# Manual install entry/value
 # Choices: enter information manually, Argentina, Armenia, Australia, Austria, Belarus, Belgium, Brazil, Bulgaria, Cambodia, Canada, Chile, China, Costa Rica, Croatia, Czechia, Denmark, El Salvador, Estonia, Finland, France, Georgia, Germany, Greece, Hong Kong, Hungary, India, Indonesia, Iran\, Islamic Republic of, Israel, Italy, Japan, Kazakhstan, Kenya, Korea\, Republic of, Kyrgyzstan, Latvia, Lithuania, Luxembourg, Moldova, Monaco, Netherlands, New Caledonia, New Zealand, North Macedonia, Norway, Philippines, Poland, Portugal, Romania, Russian Federation, Réunion, Serbia, Singapore, Slovakia, Slovenia, South Africa, Spain, Sweden, Switzerland, Taiwan, Thailand, Turkey, Ukraine, United Kingdom, United States, Uruguay, Vietnam
-choose-mirror-bin	mirror/http/countries	select	DE
-# Debian archive mirror:
+# choose-mirror-bin	mirror/http/countries	select	DE
+d-i mirror/http/countries select DE
+
+### Description: Debian archive mirror:
+#   Please select a Debian archive mirror. You should use a mirror in
+#   your country or region if you do not know which mirror has the best
+#   Internet connection to you.
+#   .
+#   Usually, deb.debian.org is a good choice.
+# d-i mirror/http/mirror select deb.debian.org
+# Possible choices: ${mirrors}
+# Manual install entry/value
 # Choices: ftp.de.debian.org, debian.inf.tu-dresden.de, ftp2.de.debian.org, ftp.halifax.rwth-aachen.de, mirror.eu.oneandone.net, mirror.de.leaseweb.net, ftp.uni-kl.de, deb.debian.org, debian-archive.trafficmanager.net, debian.tu-bs.de, packages.hs-regensburg.de, debian.mirror.lrz.de, debian.mirror.iphh.net, mirror.united-gameserver.de, ftp.plusline.net, debian.charite.de, mirror.netcologne.de, artfiles.org, debian.intergenia.de, ftp.hosteurope.de, ftp.gwdg.de, ftp.uni-bayreuth.de, ftp.tu-chemnitz.de, ftp.mpi-sb.mpg.de, ftp.stw-bonn.de, ftp-stud.hs-esslingen.de, ftp.fau.de, debian.uni-duisburg-essen.de, ftp.tu-clausthal.de, ftp.uni-stuttgart.de, ftp.uni-mainz.de, pubmirror.plutex.de, mirror.23media.de, ftp.uni-hannover.de, mirror.wtnet.de, mirror.ipb.de, mirror.netzwerge.de, mirror.k-cix.de, mirror.dogado.de, ftp.wrz.de, de.mirrors.clouvider.net, mirrors.xtom.de
-choose-mirror-bin	mirror/http/mirror	select	deb.debian.org
-# Debian archive mirror hostname:
-choose-mirror-bin	mirror/http/hostname	string	deb.debian.org
-# Debian archive mirror directory:
-choose-mirror-bin	mirror/http/directory	string	/debian/
-# HTTP proxy information (blank for none):
-choose-mirror-bin	mirror/http/proxy	string	
-# Debian archive mirror country:
+# choose-mirror-bin	mirror/http/mirror	select	deb.debian.org
+d-i mirror/http/mirror select deb.debian.org
+
+### Description: Debian archive mirror hostname:
+#   Please enter the hostname of the mirror from which Debian will be downloaded.
+#   .
+#   An alternate port can be specified using the standard [hostname]:[port]
+#   format.
+# d-i mirror/http/hostname string deb.debian.org
+# Manual install entry/value
+# choose-mirror-bin	mirror/http/hostname	string	deb.debian.org
+d-i mirror/http/hostname string deb.debian.org
+
+### Description: Debian archive mirror directory:
+#   Please enter the directory in which the mirror of the Debian archive is
+#   located.
+# d-i mirror/http/directory string /debian/
+# Manual install entry/value
+# choose-mirror-bin	mirror/http/directory	string	/debian/
+d-i mirror/http/directory string /debian/
+
+### Description: HTTP proxy information (blank for none):
+#   If you need to use a HTTP proxy to access the outside world, enter the
+#   proxy information here. Otherwise, leave this blank.
+#   .
+#   The proxy information should be given in the standard form of
+#   "http://[[user][:pass]@]host[:port]/".
+# d-i mirror/http/proxy string <string>
+# Manual install entry/value
+# choose-mirror-bin	mirror/http/proxy	string	
+
+### Description: Debian archive mirror country:
+#   The goal is to find a mirror of the Debian archive that is close to you on the network -- be
+#   aware that nearby countries, or even your own, may not be the best choice.
+# d-i mirror/https/countries select US
+# Possible choices: enter information manually
+# Manual install entry/value
 # Choices: enter information manually
-choose-mirror-bin	mirror/https/countries	select	US
-# Debian archive mirror hostname:
-choose-mirror-bin	mirror/ftp/hostname	string	mirror
-# Debian archive mirror directory:
-choose-mirror-bin	mirror/ftp/directory	string	/debian/
-# Bad archive mirror
-choose-mirror-bin	mirror/bad	error	
-# FTP proxy information (blank for none):
-choose-mirror-bin	mirror/ftp/proxy	string	
-# Protocol for file downloads:
+# choose-mirror-bin	mirror/https/countries	select	US
+d-i mirror/https/countries select US
+
+### Description: Debian archive mirror hostname:
+#   Please enter the hostname of the mirror from which Debian will be downloaded.
+#   .
+#   An alternate port can be specified using the standard [hostname]:[port]
+#   format.
+# d-i mirror/ftp/hostname string mirror
+# Manual install entry/value
+# choose-mirror-bin	mirror/ftp/hostname	string	mirror
+
+### Description: Debian archive mirror directory:
+#   Please enter the directory in which the mirror of the Debian archive is
+#   located.
+# d-i mirror/ftp/directory string /debian/
+# Manual install entry/value
+# choose-mirror-bin	mirror/ftp/directory	string	/debian/
+d-i mirror/ftp/directory string /debian/
+
+### Description: FTP proxy information (blank for none):
+#   If you need to use a FTP proxy to access the outside world, enter the
+#   proxy information here. Otherwise, leave this blank.
+#   .
+#   The proxy information should be given in the standard form of
+#   "http://[[user][:pass]@]host[:port]/".
+# d-i mirror/ftp/proxy string <string>
+# Manual install entry/value
+# choose-mirror-bin	mirror/ftp/proxy	string	
+
+### Description: Protocol for file downloads:
+#   Please select the protocol to be used for downloading files. If unsure,
+#   select "http"; it is less prone to problems involving firewalls.
+# d-i mirror/protocol select http
+# Possible choices: ${protocols}
+# Manual install entry/value
 # Choices: http, https, ftp
-choose-mirror-bin	mirror/protocol	select	http
-
-# Architecture not supported
-choose-mirror-bin	mirror/noarch	error	
-
-# Debian archive mirror:
-# Choices: 
-d-i	mirror/https/mirror	select	deb.debian.org
-# Debian archive mirror hostname:
-d-i	mirror/https/hostname	string	deb.debian.org
-# Debian archive mirror directory:
-d-i	mirror/https/directory	string	/debian/
-# HTTP proxy information (blank for none):
-d-i	mirror/https/proxy	string	
+# choose-mirror-bin	mirror/protocol	select	http	
+d-i mirror/protocol select http
 
 ############################
 #### tasksel_3.68_all.deb
@@ -1088,9 +1213,6 @@ pkgsel	pkgsel/updatedb	boolean	true
 ############################
 #### apt-mirror-setup_0.166_all.udeb
 ############################
-############################
-#### apt-mirror-setup_0.166_all.udeb
-############################
 
 ### Description: Use non-free software?
 #   Some non-free software has been made to work with Debian. Though this
@@ -1100,7 +1222,7 @@ pkgsel	pkgsel/updatedb	boolean	true
 #   .
 #   Please choose whether you want to have it available anyway.
 # d-i apt-setup/non-free boolean false
-# Manual install state
+# Manual install entry/value
 # apt-mirror-setup	apt-setup/non-free	boolean	true
 d-i apt-setup/non-free boolean true
 
@@ -1112,7 +1234,7 @@ d-i apt-setup/non-free boolean true
 #   .
 #   Please choose whether you want this software to be made available to you.
 # d-i apt-setup/contrib boolean false
-# Manual install state
+# Manual install entry/value
 # apt-mirror-setup	apt-setup/contrib	boolean	true
 d-i apt-setup/contrib boolean true
 
@@ -1123,7 +1245,7 @@ d-i apt-setup/contrib boolean true
 #   packages from this mirror.
 # d-i apt-setup/mirror/error select Retry
 # Possible choices: Retry, Change mirror, Ignore
-# Manual install entry
+# Manual install entry/value
 # apt-mirror-setup	apt-setup/mirror/error	select	Retry
 d-i apt-setup/mirror/error select Change mirror
 
@@ -1134,7 +1256,7 @@ d-i apt-setup/mirror/error select Change mirror
 #   .
 #   ${EXPLANATION}
 # d-i apt-setup/use_mirror boolean <choice>
-# Manual install entry
+# Manual install entry/value
 # apt-mirror-setup	apt-setup/use_mirror	boolean	true
 d-i apt-setup/use_mirror boolean true
 
@@ -1144,14 +1266,13 @@ d-i apt-setup/use_mirror boolean true
 #   If you are installing from a netinst CD image and choose not to use a mirror,
 #   you will end up with only a very minimal base system.
 # d-i apt-setup/no_mirror boolean false
-# Manual install entry
+# Manual install entry/value
 # apt-mirror-setup	apt-setup/no_mirror	boolean	false
 d-i apt-setup/no_mirror boolean false
 
 ############################
 #### apt-setup-udeb_0.166_amd64.udeb
 ############################
-
 ### Description: Downloading local repository key failed:
 #   The installer failed to download the public key used to sign the local
 #   repository at ${MIRROR}:
@@ -1163,10 +1284,17 @@ d-i apt-setup/no_mirror boolean false
 #   continue without all the packages from this repository.
 # d-i apt-setup/local/key-error select Retry
 # Possible choices: Retry, Ignore
+# Manual install entry/value
+# Choices: Retry, Ignore
+# apt-setup-udeb	apt-setup/local/key-error	select	Retry
+d-i apt-setup/local/key-error select Retry
 
 ### Description: for internal use; can be preseeded
 #   Host to use for security updates
 # d-i apt-setup/security_host string security.debian.org
+# Manual install entry/value
+# apt-setup-udeb	apt-setup/security_host	string	security.debian.org
+d-i apt-setup/security_host string security.debian.org
 
 ### Description: Services to use:
 #   Debian has two services that provide updates to releases: security and
@@ -1188,6 +1316,10 @@ d-i apt-setup/no_mirror boolean false
 #   allows you to manually select backports to use.
 # d-i apt-setup/services-select multiselect security, updates
 # Possible choices: security updates (from ${SEC_HOST}), release updates, backported software
+# Manual install entry/value
+# Choices: security updates (from security.debian.org), release updates, backported software
+# apt-setup-udeb	apt-setup/services-select	multiselect	security, updates, backports
+d-i apt-setup/services-select multiselect security, updates, backports
 
 ### Description: Enable source repositories in APT?
 #   By default source repositories are listed in /etc/apt/sources.list (with
@@ -1195,6 +1327,9 @@ d-i apt-setup/no_mirror boolean false
 #   you don't need this feature, you can disable those entries and save some
 #   bandwidth during "apt-get update" operations.
 # d-i apt-setup/enable-source-repositories boolean true
+# Manual install entry/value
+# apt-setup-udeb	apt-setup/enable-source-repositories	boolean	true
+d-i apt-setup/enable-source-repositories boolean true
 
 ### Description: for internal use; can be preseeded
 #   Set to the list of architectures for which packages can be installed
@@ -1202,22 +1337,8 @@ d-i apt-setup/no_mirror boolean false
 #   architecture. If empty, only allow installing packages from the native
 #   architecture.
 # d-i apt-setup/multiarch string 
-
-# Downloading local repository key failed:
-# Choices: Retry, Ignore
-# apt-setup-udeb	apt-setup/local/key-error	select	Retry
-# for internal use; can be preseeded
-# apt-setup-udeb	apt-setup/security_host	string	security.debian.org
-# Services to use:
-# Choices: security updates (from security.debian.org), release updates, backported software
-# apt-setup-udeb	apt-setup/services-select	multiselect	security, updates, backports
-# Enable source repositories in APT?
-# apt-setup-udeb	apt-setup/enable-source-repositories	boolean	true
-# for internal use; can be preseeded
+# Manual install entry/value
 # apt-setup-udeb	apt-setup/multiarch	string	
-
-# Cannot access repository
-# apt-setup-udeb	apt-setup/service-failed	error	
 
 ############################
 #### apt-cdrom-setup_0.166_all.udeb
