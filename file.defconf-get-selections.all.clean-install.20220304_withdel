@@ -1,6 +1,9 @@
-d-i partman/early_command string \
-  PRIMARYDISK=$(lsblk -lbn --output SIZE,NAME | sort -n | tail -n 1 | cut -d" " -f2);\
-  debconf-set partman-auto/disk "$PRIMARYDISK";
+#d-i partman/early_command string \
+#  PRIMARYDISK=$(lsblk -lbn --output SIZE,NAME | sort -n | tail -n 1 | cut -d" " -f2);\
+#  debconf-set partman-auto/disk "$PRIMARYDISK";
+
+d-i partman/early_command \
+   string debconf-set partman-auto/disk "$(list-devices disk | head -n1)"
 
 ############################
 #### cdebconf-udeb_0.260_amd64.udeb
@@ -469,7 +472,7 @@ d-i partman-auto/method string regular
 # - atomic: all files in one partition
 # - home:   separate /home partition
 # - multi:  separate /home, /var, and /tmp partitions
-d-i partman-auto/choose_recipe select unencrypted-install
+# d-i partman-auto/choose_recipe select unencrypted-install
 
 ### Description: for internal use; can be preseeded
 #   File to load for expert recipe
@@ -478,21 +481,26 @@ d-i partman-auto/choose_recipe select unencrypted-install
 ### Description: for internal use; can be preseeded
 #   Expert recipe content
 # d-i partman-auto/expert_recipe string <string>
-d-i partman-auto/expert_recipe string \
-        unencrypted-install :: \
-                538 538 1075 free \
-                        $iflabel{ gpt } $reusemethod{ } \
-                        method{ efi } format{ } \
-                        mountpoint{ /boot } \
-                . \
-                100000 100000 -1 ext4 \
-                        $primary{ } \
-                        method{ format } format{ } \
-                        use_filesystem{ } filesystem{ ext4 } \
-                        mountpoint{ / } \
+d-i partman-auto/expert_recipe string                           \
+        boot-root ::                                            \
+              538 538 1075 free                                 \
+                     $iflabel{ gpt }                            \
+                     $reusemethod{ }                            \
+                     method{ efi }                              \
+                     format{ }                                  \
+                .                                               \
+              40 50 100 ext4                                    \
+                     $primary{ } $bootable{ }                   \
+                     method{ format } format{ }                 \
+                     use_filesystem{ } filesystem{ ext4 }       \
+                     mountpoint{ /boot }                        \
+                .                                               \
+                100000 100000 -1 ext4                           \
+                        $primary{ }                             \
+                        method{ format } format{ }              \
+                        use_filesystem{ } filesystem{ ext4 }    \
+                        mountpoint{ / }                         \
                 .
-
-
 
 ### Description: Select disk to partition:
 #   Note that all data on the disk you select will be erased, but not before
