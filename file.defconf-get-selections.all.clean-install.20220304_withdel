@@ -1,3 +1,7 @@
+d-i partman/early_command string \
+  PRIMARYDISK=$(lsblk -lbn --output SIZE,NAME | sort -n | tail -n 1 | cut -d" " -f2);\
+  debconf-set partman-auto/disk "$PRIMARYDISK";
+
 ############################
 #### cdebconf-udeb_0.260_amd64.udeb
 ############################
@@ -425,7 +429,7 @@ openssh-server	openssh-server/password-authentication	boolean	true
 # name must be given in traditional, non-devfs format (so e.g. /dev/sda
 # and not e.g. /dev/discs/disc0/disc).
 # For example, to use the first SCSI/SATA hard disk:
-d-i partman-auto/disk string /dev/sda
+#d-i partman-auto/disk string /dev/sda
 
 ### Description: for internal use; can be preseeded
 #   Method to use for partitioning
