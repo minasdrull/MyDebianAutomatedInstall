@@ -720,7 +720,98 @@ d-i partman/confirm_nooverwrite boolean true
 # d-i partman-efi/non_efi_system boolean <choice>
 d-i partman-efi/non_efi_system boolean true
 
+############################
+#### partman-basicfilesystems_156_amd64.udeb
+############################
 
+### Description: Go back to the menu and correct errors
+#   The test of the file system with type ${TYPE} in partition #${PARTITION}
+#   of ${DEVICE} found uncorrected errors.
+#   .
+#   If you do not go back to the partitioning menu and correct these errors,
+#   the partition will be used as is.
+# d-i partman-basicfilesystems/check_failed boolean <choice>
+
+### Description: Go back to the menu and correct errors?
+#   The test of the swap space in partition #${PARTITION} of ${DEVICE} found
+#   uncorrected errors.
+#   .
+#   If you do not go back to the partitioning menu and correct these errors,
+#   the partition will be used as is.
+# d-i partman-basicfilesystems/swap_check_failed boolean <choice>
+
+### Description: Do you want to return to the partitioning menu?
+#   You have not selected any partitions for use as swap space. Enabling swap
+#   space is recommended so that the system can make better use of the
+#   available physical memory, and so that it behaves better when physical
+#   memory is scarce. You may experience installation problems if you do not
+#   have enough physical memory.
+#   .
+#   If you do not go back to the partitioning menu and assign a swap partition,
+#   the installation will continue without swap space.
+# d-i partman-basicfilesystems/no_swap boolean true
+d-i partman-basicfilesystems/no_swap boolean false
+
+### Description: Do you want to return to the partitioning menu?
+#   No mount point is assigned for the ${FILESYSTEM} file system in partition
+#   #${PARTITION} of ${DEVICE}.
+#   .
+#   If you do not go back to the partitioning menu and assign a mount point
+#   from there, this partition will not be used at all.
+# d-i partman-basicfilesystems/no_mount_point boolean <choice>
+
+### Description: Mount point for this partition:
+# d-i partman-basicfilesystems/mountpoint select <choice>
+# Possible choices: / - the root file system, /boot - static files of the boot loader, /home - user home directories, /tmp - temporary files, /usr - static data, /var - variable data, /srv - data for services provided by this system, /opt - add-on application software packages, /usr/local - local hierarchy, Enter manually, Do not mount it
+
+### Description: Mount point for this partition:
+# d-i partman-basicfilesystems/fat_mountpoint select <choice>
+# Possible choices: /dos, /windows, Enter manually, Do not mount it
+
+### Description: Mount point for this partition:
+# d-i partman-basicfilesystems/mountpoint_manual string <string>
+
+### Description: Label for the file system in this partition:
+# d-i partman-basicfilesystems/choose_label string <string>
+
+### Description: Percentage of the file system blocks reserved for the super-user:
+# d-i partman-basicfilesystems/specify_reserved string <string>
+
+### Description: Typical usage of this partition:
+#   Please specify how the file system is going to be used, so that
+#   optimal file system parameters can be chosen for that use.
+#   .
+#   standard = standard parameters,
+#   news = one inode per 4KB block,
+#   largefile = one inode per megabyte,
+#   largefile4 = one inode per 4 megabytes.
+# d-i partman-basicfilesystems/specify_usage select <choice>
+# Possible choices: ${CHOICES}
+
+### Description: Mount options:
+#   Mount options can tune the behavior of the file system.
+# d-i partman-basicfilesystems/mountoptions multiselect <choice(s)>
+# Possible choices: ${descriptions}
+
+### Description: Go back to the menu and correct this problem?
+#   Your boot partition has not been configured with the ext2
+#   file system. This is needed by your machine in order to boot. Please go
+#   back and use the ext2 file system.
+#   .
+#   If you do not go back to the partitioning menu and correct this error,
+#   the partition will be used as is. This means that you may not be able
+#   to boot from your hard disk.
+# d-i partman-basicfilesystems/boot_not_ext2 boolean <choice>
+
+### Description: Go back to the menu and correct this problem?
+#   Your boot partition is not located on the first partition of your
+#   hard disk. This is needed by your machine in order to boot.  Please go
+#   back and use your first partition as a boot partition.
+#   .
+#   If you do not go back to the partitioning menu and correct this error,
+#   the partition will be used as is. This means that you may not be able
+#   to boot from your hard disk.
+# d-i partman-basicfilesystems/boot_not_first_partition boolean <choice>
 
 ############################
 #### preseed-common_1.109_all.udeb
