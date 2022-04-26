@@ -1088,36 +1088,136 @@ pkgsel	pkgsel/updatedb	boolean	true
 ############################
 #### apt-mirror-setup_0.166_all.udeb
 ############################
-# Use non-free software?
-apt-mirror-setup	apt-setup/non-free	boolean	true
-# Use contrib software?
-apt-mirror-setup	apt-setup/contrib	boolean	true
-# Downloading a file failed:
-# Choices: Retry, Change mirror, Ignore
-apt-mirror-setup	apt-setup/mirror/error	select	Retry
-# Use a network mirror?
-apt-mirror-setup	apt-setup/use_mirror	boolean	true
-# Continue without a network mirror?
-apt-mirror-setup	apt-setup/no_mirror	boolean	false
+############################
+#### apt-mirror-setup_0.166_all.udeb
+############################
+
+### Description: Use non-free software?
+#   Some non-free software has been made to work with Debian. Though this
+#   software is not at all a part of Debian, standard Debian tools can be used
+#   to install it. This software has varying licenses which may prevent you
+#   from using, modifying, or sharing it.
+#   .
+#   Please choose whether you want to have it available anyway.
+# d-i apt-setup/non-free boolean false
+# Manual install state
+# apt-mirror-setup	apt-setup/non-free	boolean	true
+d-i apt-setup/non-free boolean true
+
+### Description: Use contrib software?
+#   Some additional software has been made to work with Debian. Though this
+#   software is free, it depends on non-free software for its operation. This
+#   software is not a part of Debian, but standard Debian tools can be
+#   used to install it.
+#   .
+#   Please choose whether you want this software to be made available to you.
+# d-i apt-setup/contrib boolean false
+# Manual install state
+# apt-mirror-setup	apt-setup/contrib	boolean	true
+d-i apt-setup/contrib boolean true
+
+### Description: Downloading a file failed:
+#   The installer failed to access the mirror. This may be a problem with your
+#   network, or with the mirror. You can choose to retry the download, select
+#   a different mirror, or ignore the problem and continue without all the
+#   packages from this mirror.
+# d-i apt-setup/mirror/error select Retry
+# Possible choices: Retry, Change mirror, Ignore
+# Manual install entry
+# apt-mirror-setup	apt-setup/mirror/error	select	Retry
+d-i apt-setup/mirror/error select Change mirror
+
+### Description: Use a network mirror?
+#   A network mirror can be used to supplement the software that is included
+#   on the installation media. This may also make newer versions of software
+#   available.
+#   .
+#   ${EXPLANATION}
+# d-i apt-setup/use_mirror boolean <choice>
+# Manual install entry
+# apt-mirror-setup	apt-setup/use_mirror	boolean	true
+d-i apt-setup/use_mirror boolean true
+
+### Description: Continue without a network mirror?
+#   No network mirror was selected.
+#   .
+#   If you are installing from a netinst CD image and choose not to use a mirror,
+#   you will end up with only a very minimal base system.
+# d-i apt-setup/no_mirror boolean false
+# Manual install entry
+# apt-mirror-setup	apt-setup/no_mirror	boolean	false
+d-i apt-setup/no_mirror boolean false
 
 ############################
 #### apt-setup-udeb_0.166_amd64.udeb
 ############################
+
+### Description: Downloading local repository key failed:
+#   The installer failed to download the public key used to sign the local
+#   repository at ${MIRROR}:
+#   .
+#   ${URL}
+#   .
+#   This may be a problem with your network, or with the server hosting this
+#   key. You can choose to retry the download, or ignore the problem and
+#   continue without all the packages from this repository.
+# d-i apt-setup/local/key-error select Retry
+# Possible choices: Retry, Ignore
+
+### Description: for internal use; can be preseeded
+#   Host to use for security updates
+# d-i apt-setup/security_host string security.debian.org
+
+### Description: Services to use:
+#   Debian has two services that provide updates to releases: security and
+#   release updates.
+#   .
+#   Security updates help to keep your system secured against attacks. Enabling
+#   this service is strongly recommended.
+#   .
+#   Release updates provide more current versions for software that changes
+#   relatively frequently and where not having the latest version could reduce
+#   the usability of the software. It also provides regression fixes.
+#   This service is only available for stable and oldstable releases.
+#   .
+#   Backported software are adapted from the development version to work with
+#   this release. Although this software has not gone through such complete
+#   testing as that contained in the release, it includes newer versions of
+#   some applications which may provide useful features. Enabling backports
+#   here does not cause any of them to be installed by default; it only
+#   allows you to manually select backports to use.
+# d-i apt-setup/services-select multiselect security, updates
+# Possible choices: security updates (from ${SEC_HOST}), release updates, backported software
+
+### Description: Enable source repositories in APT?
+#   By default source repositories are listed in /etc/apt/sources.list (with
+#   appropriate "deb-src" lines) so that "apt-get source" works. However, if
+#   you don't need this feature, you can disable those entries and save some
+#   bandwidth during "apt-get update" operations.
+# d-i apt-setup/enable-source-repositories boolean true
+
+### Description: for internal use; can be preseeded
+#   Set to the list of architectures for which packages can be installed
+#   without using 'dpkg --force-architecture', in addition to the native
+#   architecture. If empty, only allow installing packages from the native
+#   architecture.
+# d-i apt-setup/multiarch string 
+
 # Downloading local repository key failed:
 # Choices: Retry, Ignore
-apt-setup-udeb	apt-setup/local/key-error	select	Retry
+# apt-setup-udeb	apt-setup/local/key-error	select	Retry
 # for internal use; can be preseeded
-apt-setup-udeb	apt-setup/security_host	string	security.debian.org
+# apt-setup-udeb	apt-setup/security_host	string	security.debian.org
 # Services to use:
 # Choices: security updates (from security.debian.org), release updates, backported software
-apt-setup-udeb	apt-setup/services-select	multiselect	security, updates, backports
+# apt-setup-udeb	apt-setup/services-select	multiselect	security, updates, backports
 # Enable source repositories in APT?
-apt-setup-udeb	apt-setup/enable-source-repositories	boolean	true
+# apt-setup-udeb	apt-setup/enable-source-repositories	boolean	true
 # for internal use; can be preseeded
-apt-setup-udeb	apt-setup/multiarch	string	
+# apt-setup-udeb	apt-setup/multiarch	string	
 
 # Cannot access repository
-apt-setup-udeb	apt-setup/service-failed	error	
+# apt-setup-udeb	apt-setup/service-failed	error	
 
 ############################
 #### apt-cdrom-setup_0.166_all.udeb
