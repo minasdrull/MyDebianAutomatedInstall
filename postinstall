@@ -1,0 +1,14 @@
+#!/bin/bash
+
+set -e
+
+function wpa_config(){
+    cp /tmp/postinstall.d/wpa_supplicant.conf /etc/wpa_supplicant/wpa_supplicant.conf
+    cp /tmp/postinstall.d/interfaces /etc/network/interfaces
+#    systemctl restart networking.service
+}
+
+# unpack the postinstall tar file
+tar -z -x -C /tmp -f /tmp/postinstall.tar.gz
+
+wpa_config
